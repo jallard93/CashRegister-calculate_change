@@ -10,6 +10,7 @@ ASSUMPTIONS:
 NOTES:
     - Used BigDecimal class as I was having precision problems when operating on doubles
 */
+package cashregister;
 
 import java.util.Arrays;
 import java.util.ArrayList;
