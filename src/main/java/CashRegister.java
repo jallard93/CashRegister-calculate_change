@@ -118,7 +118,7 @@ public class CashRegister {
     public static void main(String[] args) {
 
         ArrayList<Double> bills = new ArrayList<>(Arrays.asList(0.01, 0.05, 0.1, 0.25, 0.5, 1.00, 5.00, 10.00, 20.00));
-        ArrayList<Integer> billCounts = new ArrayList<>(Arrays.asList(5, 0, 0, 0, 0, 0, 0, 0, 0));
+        ArrayList<Integer> billCounts = new ArrayList<>(Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 5));
 
         // initiate total number of bills
         // CHANGE THIS TO BE CALCULATED ON FLY
@@ -131,8 +131,8 @@ public class CashRegister {
         System.out.println(register.bills);
         System.out.println(register.billCounts + "\n");
 
-        double purchaseAmount = 19.90;
-        double paymentAmount  = 20.00;
+        double purchaseAmount = 2.68;
+        double paymentAmount  = 10;
         ArrayList change = register.createChange(purchaseAmount, paymentAmount);
         System.out.println("Change:");
         System.out.println(change + "\n");

@@ -70,11 +70,15 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
       register.setBillCounts(billCounts);
       register.setTotalBills(totalBills);
 
+      // get bill counts
+      System.out.println("Initial Counts: " + register.getBillCounts());
+
       // calculate and get the change response
       ArrayList<Double> change = register.createChange(purchasePrice, paymentAmount);
-      System.out.println(change);
 
-      response = "change: " + change.toString();
+      System.out.println("After Counts: " + register.getBillCounts());
+
+      response = "{\"change\":" + change.toString() + "}"; 
 
       // process Lambda API response
       try {
