@@ -47,7 +47,7 @@ public class CashRegister {
         this.totalBills = newTotalBills;
     }
 
-    public ArrayList<Double> calculateChangedouble purchasePrice, double paymentAmount) {
+    public ArrayList<Double> calculateChange (double purchasePrice, double paymentAmount) {
 
         double totalToReplenish  = paymentAmount;               
         double totalChange       = BigDecimal.valueOf(paymentAmount).subtract(BigDecimal.valueOf(purchasePrice)).doubleValue();
@@ -109,33 +109,39 @@ public class CashRegister {
         }
         double difference = (BigDecimal.valueOf(paymentAmount).subtract(BigDecimal.valueOf(purchasePrice))).subtract(BigDecimal.valueOf(sumChange)).doubleValue();
         if (difference != 0) {
-            System.out.println("Not enough change to return correct amount...we owe you " + ((paymentAmount-purchasePrice)-sumChange));
+            System.out.println("Not enough change to return correct amount...we owe you " + difference);
         }
 
         return change;
     }
 
+    public void simulateTransaction(double price, double payment, int transactionNum) {
+        System.out.println("Transaction " + transactionNum + ": ");
+        System.out.println("Purchase is: " + price);
+        System.out.println("Payment is: " + payment);
+        ArrayList change = this.calculateChange(price, payment);
+        System.out.println("Change: " + change + "\n- - - -");
+    }
+
     public static void main(String[] args) {
+        // SMALL SIMULATION OF TRANSACTIONS
         ArrayList<Double> bills = new ArrayList<>(Arrays.asList(0.01, 0.05, 0.1, 0.25, 0.5, 1.00, 5.00, 10.00, 20.00));
-        ArrayList<Integer> billCounts = new ArrayList<>(Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 5));
+        ArrayList<Integer> billCounts = new ArrayList<>(Arrays.asList(5, 5, 0, 5, 5, 5, 5, 5, 1));
         // initiate total number of bills
-        int totalBills = 45; 
+        int totalBills = 0;
+        for (int i=0; i < billCounts.size(); i++) {
+            totalBills += billCounts.get(i);
+        }
 
         // create a new CashRegister instance
         CashRegister register = new CashRegister(bills, billCounts, totalBills);
 
-        System.out.println("Bills and values before: ");
-        System.out.println(register.bills);
-        System.out.println(register.billCounts + "\n");
+        // simulate transactions
+        register.simulateTransaction(0.89, 1.00, 1);
+        register.simulateTransaction(4.99, 50, 2);
+        register.simulateTransaction(1.01, 2.00, 3);
+        register.simulateTransaction(4.99, 3.00, 4);
+        register.simulateTransaction(0.34, 100, 5);
 
-        double purchaseAmount = 2.68;
-        double paymentAmount  = 10;
-        ArrayList change = register.calculateChange(purchaseAmount, paymentAmount);
-        System.out.println("Change:");
-        System.out.println(change + "\n");
-
-        System.out.println("Bills and values after: ");
-        System.out.println(register.bills);
-        System.out.println(register.billCounts);
     }
 }
