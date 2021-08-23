@@ -59,7 +59,7 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
       register.setTotalBills(totalBills);
 
       // calculate and get the change response
-      ArrayList<Double> change = register.createChange(purchasePrice, paymentAmount);
+      ArrayList<Double> change = register.calculateChange(purchasePrice, paymentAmount);
       response = "{\"change\":" + change.toString() + "}"; 
 
       // process Lambda API response

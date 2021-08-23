@@ -55,7 +55,7 @@ public class CashRegisterTest {
             double purchaseAmount = purchasePricesGreater[i];
             double paymentAmount = paymentAmountsGreater[i];
 
-            ArrayList<Double> returnedChange = cashRegister.createChange(purchaseAmount, paymentAmount);
+            ArrayList<Double> returnedChange = cashRegister.calculateChange(purchaseAmount, paymentAmount);
 
             if (!returnedChange.equals(expectedResult)) {
                 System.out.println("Returned: " + returnedChange);
@@ -87,7 +87,7 @@ public class CashRegisterTest {
             cashRegister.setTotalBills(totalBills);
 
             // get change from transaction
-            ArrayList<Double> returnedChange = cashRegister.createChange(purchaseAmount, paymentAmount);
+            ArrayList<Double> returnedChange = cashRegister.calculateChange(purchaseAmount, paymentAmount);
 
             if (!returnedChange.equals(expectedResult)) {
                 System.out.println("Results: " + returnedChange);
@@ -123,7 +123,7 @@ public class CashRegisterTest {
             cashRegister.setTotalBills(totalBills);
 
             // get change from transaction
-            ArrayList<Double> returnedChange = cashRegister.createChange(purchaseAmount, paymentAmount);
+            ArrayList<Double> returnedChange = cashRegister.calculateChange(purchaseAmount, paymentAmount);
             // get replenished bills
             ArrayList<Integer> replenishedBills = cashRegister.getBillCounts();
 

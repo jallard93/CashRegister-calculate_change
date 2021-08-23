@@ -1,5 +1,4 @@
 /*
-
 ASSUMPTIONS:
     - When replinishing the register, I assume that the customer paid with the minimal amount of change
     necessary to reach the paymentAmount
@@ -48,7 +47,7 @@ public class CashRegister {
         this.totalBills = newTotalBills;
     }
 
-    public ArrayList<Double> createChange(double purchasePrice, double paymentAmount) {
+    public ArrayList<Double> calculateChangedouble purchasePrice, double paymentAmount) {
 
         double totalToReplenish  = paymentAmount;               
         double totalChange       = BigDecimal.valueOf(paymentAmount).subtract(BigDecimal.valueOf(purchasePrice)).doubleValue();
@@ -131,7 +130,7 @@ public class CashRegister {
 
         double purchaseAmount = 2.68;
         double paymentAmount  = 10;
-        ArrayList change = register.createChange(purchaseAmount, paymentAmount);
+        ArrayList change = register.calculateChange(purchaseAmount, paymentAmount);
         System.out.println("Change:");
         System.out.println(change + "\n");
 

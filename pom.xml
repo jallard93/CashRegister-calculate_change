@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.cashregister</groupId>
-    <artifactId>CashRegister-create_change</artifactId>
+    <artifactId>CashRegister-calculate_change</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
