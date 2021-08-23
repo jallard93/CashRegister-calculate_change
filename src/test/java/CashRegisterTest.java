@@ -1,3 +1,5 @@
+import org.junit.Test;
+import cashregister.CashRegister;
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -14,30 +16,37 @@ public class CashRegisterTest {
 
     // prices, payments, results for insufficient bill amounts in register
     public static double[] purchasePricesInsufficient = new double[] {2.68,  4.57,  14.31};
-    public static double[] paymentAmountsInsufficient = new double[] {10.00, 10.07, 20.00};
-    public static ArrayList<ArrayList<Integer>> billCountsInsufficient = new ArrayList<>(
-        Arrays.asList({{0, 5, 5, 5, 5, 5, 5, 5, 5}, 
-                       {5, 5, 5, 0, 5, 5, 5, 5, 5},
-                       {5, 0, 0, 5, 5, 5, 5, 5, 5}}));
-    public static ArrayList<ArrayList<Double>> expectedResultsInsufficient = new ArrayList<>(
-        Arrays.asList({{5.00, 1.00, 1.00, 0.25, 0.05}, 
-                       {5.0, 0.1, 0.05, 0.01, 0.01, 0.01},
-                       {5.0, 0.5, 0.01, 0.01, 0.01, 0.01}}));
-    public static int totalBillsInsufficient = new int[] {40, 40, 35};
+    public static double[] paymentAmountsInsufficient = new double[] {10.00, 10.00, 20.00};
+    public static ArrayList<ArrayList<Integer>> billCountsInsufficient = new ArrayList<>();
+    public static ArrayList<ArrayList<Double>> expectedResultsInsufficient = new ArrayList<>();
+    public static int[] totalBillsInsufficient = new int[] {40, 40, 35};
 
     // prices, payments, results for regular transaction tests
     public static double[] purchasePricesTransaction = new double[] {15.42, 0.44, 9.64};
     public static double[] paymentAmountsTransaction = new double[] {16.00, 1.04, 20.00};
-    public static ArrayList<ArrayList<Double>> expectedResultsTransactions = new ArrayList<>(
-        Arrays.asList({{0.5, 0.05, 0.01, 0.01, 0.01}, 
-                       {0.5, 0.1},
-                       {10.0, 0.25, 0.1, 0.01}}));
-    public static ArrayList<ArrayList<Integer>> expectedReplenished = new ArrayList<>(
-        Arrays.asList({{2, 4, 5, 5, 4, 6, 6, 6, 5}, 
-                       {9, 5, 4, 5, 4, 6, 5, 5, 5},
-                       {4, 5, 4, 4, 5, 5, 5, 4, 6}));
+    public static ArrayList<ArrayList<Double>> expectedResultsTransactions = new ArrayList<>();
+    public static ArrayList<ArrayList<Integer>> expectedReplenished = new ArrayList<>();
+    
 
-    // @Test
+    public CashRegisterTest() {
+        billCountsInsufficient.add(new ArrayList<Integer>(Arrays.asList(0, 5, 5, 5, 5, 5, 5, 5, 5)));
+        billCountsInsufficient.add(new ArrayList<Integer>(Arrays.asList(0, 0, 0, 1, 0, 5, 5, 5, 5)));
+        billCountsInsufficient.add(new ArrayList<Integer>(Arrays.asList(4, 0, 0, 5, 5, 5, 5, 5, 5)));
+
+        expectedResultsInsufficient.add(new ArrayList<Double>(Arrays.asList(5.0, 1.00, 1.00, 0.25, 0.05)));
+        expectedResultsInsufficient.add(new ArrayList<Double>(Arrays.asList(5.0, 0.25)));
+        expectedResultsInsufficient.add(new ArrayList<Double>(Arrays.asList(5.0, 0.5, 0.01, 0.01, 0.01, 0.01)));
+
+        expectedResultsTransactions.add(new ArrayList<Double>(Arrays.asList(0.5, 0.05, 0.01, 0.01, 0.01)));
+        expectedResultsTransactions.add(new ArrayList<Double>(Arrays.asList(0.5, 0.1)));
+        expectedResultsTransactions.add(new ArrayList<Double>(Arrays.asList(10.0, 0.25, 0.1, 0.01)));
+
+        expectedReplenished.add(new ArrayList<Integer>(Arrays.asList(2, 4, 5, 5, 4, 6, 6, 6, 5)));
+        expectedReplenished.add(new ArrayList<Integer>(Arrays.asList(9, 5, 4, 5, 4, 6, 5, 5, 5)));
+        expectedReplenished.add(new ArrayList<Integer>(Arrays.asList(4, 5, 4, 4, 5, 5, 5, 4, 6)));
+    }
+
+    @Test
     public void testPurchaseGreaterThanPayment() {
         // expected output equal to empty ArrayList
         ArrayList<Double> expectedResult = new ArrayList<>();
@@ -48,18 +57,23 @@ public class CashRegisterTest {
 
             ArrayList<Double> returnedChange = cashRegister.createChange(purchaseAmount, paymentAmount);
 
-            assert(returnedChange == expectedResult);
+            if (!returnedChange.equals(expectedResult)) {
+                System.out.println("Returned: " + returnedChange);
+                System.out.println("Expected: " + expectedResult);
+            }
+            
+            assert(returnedChange.equals(expectedResult));
         }
     }
 
-    // @Test
+    @Test
     public void testInsufficientBillAmounts() {
         // expected output equal to ArrayList with some coins missing...
-        for (int i=0; i < this.purchasePricesInsufficient; i++) {
+        for (int i=0; i < this.purchasePricesInsufficient.length; i++) {
             ArrayList<Double> expectedResult = this.expectedResultsInsufficient.get(i);
 
             // initialize purchase and payment
-            double purchaseAmount = this.purchasePricesInsufficient[i];
+            double purchaseAmount = purchasePricesInsufficient[i];
             double paymentAmount = this.paymentAmountsInsufficient[i];
 
             // get bills and counts
@@ -75,17 +89,21 @@ public class CashRegisterTest {
             // get change from transaction
             ArrayList<Double> returnedChange = cashRegister.createChange(purchaseAmount, paymentAmount);
 
-            assert(returnedChange == expectedResult);
+            if (!returnedChange.equals(expectedResult)) {
+                System.out.println("Results: " + returnedChange);
+                System.out.println("Expected: " + expectedResult);
+            }
+            assert(returnedChange.equals(expectedResult));
         }
     }
 
-    // @Test
+    @Test
     public void testTransactions() {
 
         for (int i=0; i < purchasePricesTransaction.length; i++) {
             // expected output equal to ArrayList exactly
             ArrayList<Double> expectedResult = expectedResultsTransactions.get(i);
-            ArrayList<Integer> expectedReplenished = expectedReplenished.get(i);
+            ArrayList<Integer> replenished = expectedReplenished.get(i);
 
             // initialize purchase and payment
             double purchaseAmount = purchasePricesTransaction[i];
@@ -110,9 +128,9 @@ public class CashRegisterTest {
             ArrayList<Integer> replenishedBills = cashRegister.getBillCounts();
 
             // assert we got the right amount of change
-            assert(returnedChange == expectedResult);
+            assert(returnedChange.equals(expectedResult));
             // assert we replenished correctly
-            assert(replenishedBills == expectedReplenished);
+            assert(replenishedBills.equals(replenished));
         }
     }
 

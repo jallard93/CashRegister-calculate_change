@@ -62,7 +62,7 @@ public class CashRegister {
     
         // replenish the register as soon as we're handed a payment amount
         while (totalToReplenish > 0) {
-            double largestBill = this.bills.get(0);
+            double largestBill = 0;
             // find the optimal bill for replenishing
             for (int i=0; i < this.bills.size(); i++) {
                 double bill = this.bills.get(i);
@@ -79,7 +79,7 @@ public class CashRegister {
         // and then find next available largest bill, etc
         while (totalChange > 0 && this.totalBills > 0) {
             // initialize the largest bill
-            double largestBill = this.bills.get(0);
+            double largestBill = 0;
 
             // find the largest bill just larger than the change amount
             for (int i=0; i < this.bills.size(); i++) {
@@ -92,13 +92,18 @@ public class CashRegister {
                 }
             }
 
-            // update the bill counts, the bill values, and total change left
-            this.totalBills--;
-            int indexBill = this.bills.indexOf(largestBill);
-            this.billCounts.set(this.bills.indexOf(largestBill), this.billCounts.get(indexBill) - 1);
-            totalChange = BigDecimal.valueOf(totalChange).subtract(BigDecimal.valueOf(largestBill)).doubleValue();
+            // if no bills exist exit
+            if (largestBill == 0) { 
+                totalChange = 0; 
+            } else {
+                // update the bill counts, the bill values, and total change left
+                this.totalBills--;
+                int indexBill = this.bills.indexOf(largestBill);
+                this.billCounts.set(this.bills.indexOf(largestBill), this.billCounts.get(indexBill) - 1);
+                totalChange = BigDecimal.valueOf(totalChange).subtract(BigDecimal.valueOf(largestBill)).doubleValue();
 
-            change.add(largestBill);
+                change.add(largestBill);
+            }
         }
 
         // check that the change amount constructed is equal to the change amount expected
