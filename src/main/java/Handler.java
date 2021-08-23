@@ -34,20 +34,11 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
 
     private static final Logger logger = LoggerFactory.getLogger(Handler.class);
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private static final LambdaAsyncClient lambdaClient = LambdaAsyncClient.create();
     private ArrayList<Double> bills = new ArrayList<>();
     private ArrayList<Integer> billCounts = new ArrayList<>();
     private int totalBills = 0;
     private CashRegister register = new CashRegister(bills, billCounts, totalBills);
-    
-    public Handler(){
-      CompletableFuture<GetAccountSettingsResponse> accountSettings = lambdaClient.getAccountSettings(GetAccountSettingsRequest.builder().build());
-      try {
-        GetAccountSettingsResponse settings = accountSettings.get();
-      } catch(Exception e) {
-        e.getStackTrace();
-      }
-    }
+  
 
     @Override
     public String handleRequest(Map<String,String> event, Context context)
@@ -55,11 +46,8 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
       String response = new String();
       // call Lambda API
       logger.info("Getting account settings");
-      CompletableFuture<GetAccountSettingsResponse> accountSettings = 
-          lambdaClient.getAccountSettings(GetAccountSettingsRequest.builder().build());
-      
-      System.out.println(event);
 
+      // initiate purchase price
       double purchasePrice = BigDecimal.valueOf(Double.parseDouble(event.get("purchasePrice"))).doubleValue();
       double paymentAmount = BigDecimal.valueOf(Double.parseDouble(event.get("paymentAmount"))).doubleValue();
       ArrayList<Integer> billCounts = this.parseBillCounts(event.get("billCounts"));
@@ -70,19 +58,12 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
       register.setBillCounts(billCounts);
       register.setTotalBills(totalBills);
 
-      // get bill counts
-      System.out.println("Initial Counts: " + register.getBillCounts());
-
       // calculate and get the change response
       ArrayList<Double> change = register.createChange(purchasePrice, paymentAmount);
-
-      System.out.println("After Counts: " + register.getBillCounts());
-
       response = "{\"change\":" + change.toString() + "}"; 
 
       // process Lambda API response
       try {
-        GetAccountSettingsResponse settings = accountSettings.get();
         response = gson.toJson(response);
         logger.info("Account usage: {}", response);
       } catch(Exception e) {
@@ -92,10 +73,11 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
     }
 
     public ArrayList<Integer> parseBillCounts(String billCounts) {
+      // remove array character
       String[] items = billCounts.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
-
       ArrayList<Integer> results = new ArrayList<>();
 
+      // parse each integer from the json
       for (int i = 0; i < items.length; i++) {
         results.add(Integer.parseInt(items[i]));
       }

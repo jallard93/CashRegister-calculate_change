@@ -1,7 +1,4 @@
 /*
-TODO:
-    - Default constructor
-    - What data structure to use?
 
 ASSUMPTIONS:
     - When replinishing the register, I assume that the customer paid with the minimal amount of change
@@ -119,15 +116,11 @@ public class CashRegister {
         return change;
     }
 
-
     public static void main(String[] args) {
-
         ArrayList<Double> bills = new ArrayList<>(Arrays.asList(0.01, 0.05, 0.1, 0.25, 0.5, 1.00, 5.00, 10.00, 20.00));
         ArrayList<Integer> billCounts = new ArrayList<>(Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 5));
-
         // initiate total number of bills
-        // CHANGE THIS TO BE CALCULATED ON FLY
-        int totalBills = 5; 
+        int totalBills = 45; 
 
         // create a new CashRegister instance
         CashRegister register = new CashRegister(bills, billCounts, totalBills);
