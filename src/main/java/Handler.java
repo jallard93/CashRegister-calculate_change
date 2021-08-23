@@ -60,12 +60,11 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
 
       // calculate and get the change response
       ArrayList<Double> change = register.calculateChange(purchasePrice, paymentAmount);
-      response = "{\"change\":" + change.toString() + "}"; 
+      response = "{\"change\":" + change.toString() + ",\"bills\":"+ register.getBillCounts().toString() + "}"; 
 
       // process Lambda API response
       try {
         response = gson.toJson(response);
-        logger.info("Account usage: {}", response);
       } catch(Exception e) {
         e.getStackTrace();
       }

@@ -119,14 +119,16 @@ public class CashRegister {
         System.out.println("Transaction " + transactionNum + ": ");
         System.out.println("Purchase is: " + price);
         System.out.println("Payment is: " + payment);
+        System.out.println("Bills: " + this.getBillCounts());
         ArrayList change = this.calculateChange(price, payment);
+        System.out.println("Bills: " + this.getBillCounts());
         System.out.println("Change: " + change + "\n- - - -");
     }
 
     public static void main(String[] args) {
         // SMALL SIMULATION OF TRANSACTIONS
         ArrayList<Double> bills = new ArrayList<>(Arrays.asList(0.01, 0.05, 0.1, 0.25, 0.5, 1.00, 5.00, 10.00, 20.00));
-        ArrayList<Integer> billCounts = new ArrayList<>(Arrays.asList(5, 5, 0, 5, 5, 5, 5, 5, 1));
+        ArrayList<Integer> billCounts = new ArrayList<>(Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 5));
         // initiate total number of bills
         int totalBills = 0;
         for (int i=0; i < billCounts.size(); i++) {
@@ -137,11 +139,13 @@ public class CashRegister {
         CashRegister register = new CashRegister(bills, billCounts, totalBills);
 
         // simulate transactions
-        register.simulateTransaction(0.89, 1.00, 1);
-        register.simulateTransaction(4.99, 50, 2);
-        register.simulateTransaction(1.01, 2.00, 3);
-        register.simulateTransaction(4.99, 3.00, 4);
-        register.simulateTransaction(0.34, 100, 5);
+        // register.simulateTransaction(0.89, 1.00, 1);
+        // register.simulateTransaction(4.99, 50, 2);
+        // register.simulateTransaction(1.01, 2.00, 3);
+        // register.simulateTransaction(4.99, 3.00, 4);
+        // register.simulateTransaction(0.34, 100, 5);
+
+        register.simulateTransaction(6, 649, 5);
 
     }
 }
